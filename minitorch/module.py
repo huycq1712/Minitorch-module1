@@ -21,11 +21,28 @@ class Module:
 
     def train(self):
         "Set the mode of this module and all descendent modules to `train`."
-        raise NotImplementedError('Need to include this file from past assignment.')
+        # TODO: Implement for Task 0.4.
+        def traserval_tree(root):
+            root.training = True
+            if root.get_modules() is None:
+                return
+            for child in root.get_modules().values():
+                traserval_tree(child)
+
+        traserval_tree(self)
 
     def eval(self):
         "Set the mode of this module and all descendent modules to `eval`."
-        raise NotImplementedError('Need to include this file from past assignment.')
+        # TODO: Implement for Task 0.4.
+        def traserval_tree(root):
+            root.training = False
+            if root.get_modules() is None:
+                return
+            for child in root.get_modules().values():
+                traserval_tree(child)
+
+        traserval_tree(self)
+
 
     def named_parameters(self):
         """
@@ -35,11 +52,37 @@ class Module:
         Returns:
             list of pairs: Contains the name and :class:`Parameter` of each ancestor parameter.
         """
-        raise NotImplementedError('Need to include this file from past assignment.')
-
+        # TODO: Implement for Task 0.4.
+        def traversal_params(root, name_module, res):
+            if name_module != '':
+                name_module = name_module+'.'
+            for name_params in root.get_params():
+                res.append((name_module + name_params, root.get_params()[name_params]))
+            if root() is None:
+                return
+            for child in root.get_modules():
+                traversal_params(root.get_modules()[child],name_module + child, res)
+            
+        result = []
+        traversal_params(self,'',result)
+        return result
+        
+    
     def parameters(self):
         "Enumerate over all the parameters of this module and its descendents."
-        raise NotImplementedError('Need to include this file from past assignment.')
+        # TODO: Implement for Task 0.4.
+        def traversal_params_enum(root, result):
+            for params in root.get_params():
+                result.append(params)
+            if root.get_modules() is None:
+                return
+            for child in root.get_modules().values():
+                traversal_params_enum(child, result)
+        
+        result = []
+        traversal_params_enum(self, result)       
+        return result
+
 
     def add_parameter(self, k, v):
         """
@@ -104,6 +147,13 @@ class Module:
         main_str += ")"
         return main_str
 
+    def get_modules(self):
+        return self._modules
+
+    def get_params(self):
+        return self._parameters
+
+    
 
 class Parameter:
     """
