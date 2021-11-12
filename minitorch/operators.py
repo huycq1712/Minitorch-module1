@@ -136,6 +136,10 @@ def relu_back(x, d):
     # TODO: Implement for Task 0.1.
     return 0 if x<=0 else d
 
+def sigmoid_back(x, d):
+    r"If :math:'f = sigmoid' compute d: math 'd \time f'(x)'"
+    return d*(sigmoid(x) - 2*sigmoid(x)*sigmoid(x))
+
 
 # ## Task 0.3
 
