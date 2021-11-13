@@ -274,7 +274,14 @@ class FunctionBase:
         # Tip: Note when implementing this function that
         # cls.backward may return either a value or a tuple.
         # TODO: Implement for Task 1.3.
-        raise NotImplementedError('Need to implement for Task 1.3')
+        dericatives = cls.backward(ctx, d_output)
+        result = []
+        i = 0
+        for val in inputs:
+            if not is_constant(val):
+                result.append((val, dericatives[i]))
+            i = i + 1
+        return result        
 
 
 # Algorithms for backpropagation
