@@ -191,7 +191,7 @@ class History:
             list of numbers : a derivative with respect to `inputs`
         """
         # TODO: Implement for Task 1.4.
-        raise NotImplementedError('Need to implement for Task 1.4')
+        return self.last_fn.chain_rule(self.ctx, self.inputs, d_output)
 
 
 class FunctionBase:
@@ -277,11 +277,17 @@ class FunctionBase:
         dericatives = cls.backward(ctx, d_output)
         result = []
         i = 0
-        for val in inputs:
-            if not is_constant(val):
-                result.append((val, dericatives[i]))
-            i = i + 1
-        return result        
+        if isinstance(dericatives, tuple):
+            for val in inputs:
+                if not is_constant(val):
+                    result.append((val, dericatives[i]))
+                i = i + 1
+        else:
+            for val in inputs:
+                if not is_constant(val):
+                    result.append((val, dericatives))
+                i = i + 1
+        return result      
 
 
 # Algorithms for backpropagation
@@ -303,8 +309,20 @@ def topological_sort(variable):
                             starting from the right.
     """
     # TODO: Implement for Task 1.4.
-    raise NotImplementedError('Need to implement for Task 1.4')
-
+    def depth_first_traversal(root, result):
+        if is_constant(root):
+            return
+        stack = [root]
+        node = stack.pop()
+        result.append(node)
+        if node.is_leaf():
+            return
+        else:
+            for v in node.history.inputs:
+                depth_first_traversal(v, result)
+    result = []
+    depth_first_traversal(variable, result)
+    return result
 
 def backpropagate(variable, deriv):
     """
@@ -320,4 +338,13 @@ def backpropagate(variable, deriv):
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
     # TODO: Implement for Task 1.4.
-    raise NotImplementedError('Need to implement for Task 1.4')
+    order =  topological_sort(variable)
+    queue=[(None, deriv)]
+    for node in order:
+        if node.is_leaf():
+            node.accumulate_derivative(queue.pop(0)[1])
+        else:
+            deriv_node = node.history.backprop_step(queue.pop(0)[1])
+            for item in deriv_node:
+                queue.append(item)
+            

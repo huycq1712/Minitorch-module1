@@ -60,18 +60,12 @@ def is_close(x, y):
 def sigmoid(x):
     r"""
     :math:`f(x) =  \frac{1.0}{(1.0 + e^{-x})}`
-
     (See `<https://en.wikipedia.org/wiki/Sigmoid_function>`_ .)
-
     Calculate as
-
     :math:`f(x) =  \frac{1.0}{(1.0 + e^{-x})}` if x >=0 else :math:`\frac{e^x}{(1.0 + e^{x})}`
-
     for stability.
-
     Args:
         x (float): input
-
     Returns:
         float : sigmoid value
     """
@@ -82,12 +76,9 @@ def sigmoid(x):
 def relu(x):
     """
     :math:`f(x) =` x if x is greater than 0, else 0
-
     (See `<https://en.wikipedia.org/wiki/Rectifier_(neural_networks)>`_ .)
-
     Args:
         x (float): input
-
     Returns:
         float : relu value
     """
@@ -117,17 +108,14 @@ def log_back(x, d):
 def inv(x):
     ":math:`f(x) = 1/x`"
     # TODO: Implement for Task 0.1.
-    if x != 0:
-        return 1/x
-    else:
-        raise ValueError('divide by zero')
+    return 1.0/(x)
 
 
 def inv_back(x, d):
     r"If :math:`f(x) = 1/x` compute d :math:`d \times f'(x)`"
     # TODO: Implement for Task 0.1.
     if x != 0:
-        return -d*(1/x**2)
+        return float(d)*(-1.0/((x)**2))
     else:
         raise ValueError('divide by zero')
 
@@ -138,7 +126,7 @@ def relu_back(x, d):
 
 def sigmoid_back(x, d):
     r"If :math:'f = sigmoid' compute d: math 'd \time f'(x)'"
-    return d*(sigmoid(x) - 2*sigmoid(x)*sigmoid(x))
+    return d*(sigmoid(x) - sigmoid(x)*sigmoid(x))
 
 
 # ## Task 0.3
@@ -149,15 +137,10 @@ def sigmoid_back(x, d):
 def map(fn):
     """
     Higher-order map.
-
     .. image:: figs/Ops/maplist.png
-
-
     See `<https://en.wikipedia.org/wiki/Map_(higher-order_function)>`_
-
     Args:
         fn (one-arg function): Function from one value to one value.
-
     Returns:
         function : A function that takes a list, applies `fn` to each element, and returns a
         new list
@@ -178,18 +161,13 @@ def negList(ls):
 def zipWith(fn):
     """
     Higher-order zipwith (or map2).
-
     .. image:: figs/Ops/ziplist.png
-
     See `<https://en.wikipedia.org/wiki/Map_(higher-order_function)>`_
-
     Args:
         fn (two-arg function): combine two values
-
     Returns:
         function : takes two equally sized lists `ls1` and `ls2`, produce a new list by
         applying fn(x, y) on each pair of elements.
-
     """
     # TODO: Implement for Task 0.3.
     def zip_func(ls1, ls2):
@@ -209,14 +187,10 @@ def addLists(ls1, ls2):
 def reduce(fn, start):
     r"""
     Higher-order reduce.
-
     .. image:: figs/Ops/reducelist.png
-
-
     Args:
         fn (two-arg function): combine two values
         start (float): start value :math:`x_0`
-
     Returns:
         function : function that takes a list `ls` of elements
         :math:`x_1 \ldots x_n` and computes the reduction :math:`fn(x_3, fn(x_2,

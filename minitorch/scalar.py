@@ -193,7 +193,7 @@ class Mul(ScalarFunction):
     def forward(ctx, a, b):
         # TODO: Implement for Task 1.2.
         ctx.save_for_backward((a, b))
-        return a*b
+        return operators.mul(a, b)
 
     @staticmethod
     def backward(ctx, d_output):
